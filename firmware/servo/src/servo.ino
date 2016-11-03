@@ -6,7 +6,9 @@
 
 #define SERVO_TILT_PIN 9
 #define SERVO_PAN_PIN 8
-#define SERVO_WAIT_TIME 1000
+#define SERVO_FIRE_PIN 3
+#define SERVO_MOVE_WAIT_TIME 1000
+#define SERVO_FIRE_WAIT_TIME 100
 
 int servo_panPosition = 0;
 int servo_tiltPosition = 0;
@@ -26,6 +28,8 @@ void setup() {
 
   servo_pan.attach(SERVO_PAN_PIN); //pin 9 on arduino
   servo_tilt.attach(SERVO_TILT_PIN); //pin 9 on arduino
+
+  pinMode(SERVO_FIRE_PIN, OUTPUT);
 
   Serial.begin(115200);  // Activate Serial protocol
   Serial.println("Listening for serial commands...");
@@ -53,6 +57,9 @@ void loop() {
       Serial.print("Tilt: ");
       Serial.println(servo_tiltPosition);
     }
+    else if (inputStr.length() == 1) {
+      fire();
+    }
     else {
       Serial.print("READ SYNTAX ERROR: ");
       Serial.println(inputStr);
@@ -68,7 +75,7 @@ void loop() {
 void setTilt(int deg)
 {
   servo_tilt.write(deg);
-  delay(SERVO_WAIT_TIME);
+  delay(SERVO_MOVE_WAIT_TIME);
 }
 
 
@@ -76,7 +83,16 @@ void setTilt(int deg)
 void setPan(int deg)
 {
   servo_pan.write(deg);
-  delay(SERVO_WAIT_TIME);
+  delay(SERVO_MOVE_WAIT_TIME);
+}
+
+
+void fire()
+{
+  digitalWrite(SERVO_FIRE_PIN, HIGH);
+  delay(SERVO_FIRE_WAIT_TIME);
+  digitalWrite(SERVO_FIRE_PIN, LOW);
+  delay(SERVO_FIRE_WAIT_TIME);
 }
 
 
