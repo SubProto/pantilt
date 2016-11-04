@@ -26,7 +26,7 @@ void setup() {
   inputStr.reserve(256);
   argStr.reserve(4);
 
-  servo_pan.attach(SERVO_PAN_PIN); //pin 9 on arduino
+  servo_pan.attach(SERVO_PAN_PIN); //pin 8 on arduino
   servo_tilt.attach(SERVO_TILT_PIN); //pin 9 on arduino
 
   pinMode(SERVO_FIRE_PIN, OUTPUT);
