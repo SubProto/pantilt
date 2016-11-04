@@ -7,7 +7,7 @@
 #define SERVO_TILT_PIN 9
 #define SERVO_PAN_PIN 8
 #define SERVO_FIRE_PIN 3
-#define SERVO_MOVE_WAIT_TIME 1000
+#define SERVO_MOVE_WAIT_TIME 250
 #define SERVO_FIRE_WAIT_TIME 100
 
 int servo_panPosition = 0;
@@ -49,6 +49,8 @@ void loop() {
       servo_tiltPosition = (int) strtol(&argStr[0], NULL, 10);
       // Serial.println(argStr);
 
+      Serial.println("MOVING");
+
       setPan(servo_panPosition);
       setTilt(servo_tiltPosition);
 
@@ -89,6 +91,7 @@ void setPan(int deg)
 
 void fire()
 {
+  Serial.println("FIRING");
   digitalWrite(SERVO_FIRE_PIN, HIGH);
   delay(SERVO_FIRE_WAIT_TIME);
   digitalWrite(SERVO_FIRE_PIN, LOW);
