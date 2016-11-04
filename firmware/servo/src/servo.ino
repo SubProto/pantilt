@@ -5,6 +5,7 @@
 #include <Servo.h>
 
 #define SERVO_TILT_PIN 9
+#define LASER_PIN 7
 #define SERVO_PAN_PIN 8
 #define SERVO_FIRE_PIN 3
 #define SERVO_MOVE_WAIT_TIME 250
@@ -29,6 +30,7 @@ void setup() {
   servo_pan.attach(SERVO_PAN_PIN); //pin 8 on arduino
   servo_tilt.attach(SERVO_TILT_PIN); //pin 9 on arduino
 
+  pinMode(LASER_PIN, OUTPUT);
   pinMode(SERVO_FIRE_PIN, OUTPUT);
 
   Serial.begin(115200);  // Activate Serial protocol
@@ -58,6 +60,16 @@ void loop() {
       Serial.println(servo_panPosition);
       Serial.print("Tilt: ");
       Serial.println(servo_tiltPosition);
+    }
+    else if (inputStr.length() == 4) {
+      if(inputStr[2] == '0') {
+        digitalWrite(LASER_PIN, LOW);
+        Serial.println("Laser: off");
+      }
+      else {
+        digitalWrite(LASER_PIN, HIGH);
+        Serial.println("Laser: on");
+      }
     }
     else if (inputStr.length() == 1) {
       fire();
