@@ -6,12 +6,15 @@
 
 #define SERVO_TILT_PIN 9
 #define SERVO_PAN_PIN 8
-#define SERVO_FIRE_PIN 3
-
-#define SERVO_MOVE_WAIT_TIME 250
-#define SERVO_FIRE_WAIT_TIME 100
+#define SERVO_FIRE_PIN 6
 
 #define LAUNCH_MOTOR_PIN 5
+
+#define SERVO_MOVE_WAIT_TIME 250
+#define SERVO_FIRE_WAIT_TIME 10
+
+
+
 
 boolean launch_state = 0;
 
@@ -21,6 +24,7 @@ int servo_tiltPosition = 0;
 
 Servo servo_pan;
 Servo servo_tilt;
+Servo servo_fire;
 
 String inputStr = "";             // a string to hold incoming data
 boolean serialCmdReady = false;   // is a serial command ready to process?
@@ -33,11 +37,14 @@ void setup() {
   inputStr.reserve(256);
   argStr.reserve(4);
 
-  servo_pan.attach(SERVO_PAN_PIN); //pin 9 on arduino
-  servo_tilt.attach(SERVO_TILT_PIN); //pin 9 on arduino
+  servo_pan.attach(SERVO_PAN_PIN);
+  servo_tilt.attach(SERVO_TILT_PIN);
+  servo_fire.attach(SERVO_FIRE_PIN);
 
   pinMode(LAUNCH_MOTOR_PIN, OUTPUT);
-  pinMode(SERVO_FIRE_PIN, OUTPUT);
+  // pinMode(SERVO_FIRE_PIN, OUTPUT);
+  // digitalWrite(SERVO_FIRE_PIN, HIGH);
+  digitalWrite(LAUNCH_MOTOR_PIN, HIGH);
 
   Serial.begin(115200);  // Activate Serial protocol
   Serial.println("Listening for serial commands...");
@@ -73,12 +80,15 @@ void loop() {
       Serial.print("Launch Motors:");
       if (launch_state) {
         launch_state = 0;
-        digitalWrite(LAUNCH_MOTOR_PIN, LOW);
+        digitalWrite(LAUNCH_MOTOR_PIN, HIGH);
+        delay(50);
       } else {
         launch_state = 1;
-        digitalWrite(LAUNCH_MOTOR_PIN, HIGH);
+        digitalWrite(LAUNCH_MOTOR_PIN, LOW);
+        delay(50);
       }
       Serial.println(launch_state);
+      delay(500);
     }
     else {
       Serial.print("READ SYNTAX ERROR: ");
@@ -109,11 +119,17 @@ void setPan(int deg)
 
 void fire()
 {
-  Serial.println("FIRING");
-  digitalWrite(SERVO_FIRE_PIN, HIGH);
-  delay(SERVO_FIRE_WAIT_TIME);
-  digitalWrite(SERVO_FIRE_PIN, LOW);
-  delay(SERVO_FIRE_WAIT_TIME);
+  // Serial.println("FIRING");
+  // digitalWrite(SERVO_FIRE_PIN, LOW);
+  // delay(SERVO_FIRE_WAIT_TIME);
+  // digitalWrite(SERVO_FIRE_PIN, HIGH);
+  // delay(SERVO_FIRE_WAIT_TIME);
+
+  servo_fire.write(180);
+  delay(2000);
+
+  servo_fire.write(0);
+  delay(SERVO_MOVE_WAIT_TIME);
 }
 
 
